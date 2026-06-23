@@ -1,0 +1,14 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "585e8169-9396-4b6b-8842-13116ff3d2bb")
+	(paper "A4")
+	(title_block
+		(date "2026-06-19")
+		(rev "1")
+		(company "Elohim Dzangare")
+		(comment 1 "Personal Project")
+	)
+	(lib_symbols)
+)
