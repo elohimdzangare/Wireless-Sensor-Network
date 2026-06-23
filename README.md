@@ -26,10 +26,8 @@ Rooms are just labelled A, B and C for now instead of actual room names, so the 
 ├── /node
 │   └── sensor_node_final.ino    (final sensor node sketch, used on all 3 nodes)
 ├── /matlab
-│   └── live_monitor.m
+│   └── src.m
 └── /archive                     (earlier test sketches, kept for reference)
-    ├── mac_address.ino
-    ├── led_esp_test.ino
     ├── sensor_test.ino
     ├── sensor_node_test.ino
     ├── gateway_receive_test.ino
@@ -37,7 +35,7 @@ Rooms are just labelled A, B and C for now instead of actual room names, so the 
     └── hotspot_connection_test.ino
 ```
 
-The `/archive` folder is just earlier versions and one-off test sketches from along the way (checking the MAC address, testing the LEDs on their own, testing the sensors before adding ESP-NOW, etc). Not needed to actually run the project, just there to show how it was built up step by step.
+The `/archive` folder is just earlier versions and one-off test sketches from along the way (testing the sensors before adding ESP-NOW, testing the gateway before connecting it to MATLAB, etc). Not needed to actually run the project, just there to show how it was built up step by step.
 
 ---
 
@@ -144,7 +142,7 @@ All the LED flashing is non-blocking. The usual way to blink an LED is `digitalW
 | `ERROR_SENSOR_FAULT` | Slow blink, 500ms on/off | A node is still reachable but one of its sensors failed |
 | `ERROR_NODE_UNREACHABLE` | Solid on | A node didn't wake up in time, missed its expected window |
 
-If both are happening at once, unreachable wins and the LED goes solid. The thinking is a node going completely silent is worse than one sensor on one node acting up.
+If both are happening at once, unreachable wins and the LED goes solid. The reason behind this is that a node going completely silent is worse than one sensor on one node acting up.
 
 ### Gateway Pin Assignments
 
@@ -233,7 +231,7 @@ A fixed timeout doesn't really work once nodes are sleeping for minutes at a tim
 - Logs every `STATUS`/`ERROR` message into `sensor_log.txt`, which keeps appending across sessions
 - Plots live data in 3 stacked subplots (temperature, humidity, light), each one showing all 3 rooms as separate lines, with a rolling window of recent points
 
-> The gateway's IP address can change depending on whatever network it joins, since it's assigned by DHCP. Check Serial Monitor each session and update the IP in the MATLAB script if needed.
+> The gateway's IP address can change depending on whatever network it joins, since it's assigned by DHCP. The Serial Monitor must be checked each session and update the IP in the MATLAB script if needed.
 
 ---
 
@@ -242,16 +240,13 @@ A fixed timeout doesn't really work once nodes are sleeping for minutes at a tim
 A running list of the actual problems hit while building this, since most of them weren't obvious from the code alone.
 
 **LED wouldn't light up no matter what**
-Spent ages checking polarity, resistor values, GPIO pin mapping, even swapped pins entirely. Eventually traced it to the breadboard itself: long breadboards have a physical gap splitting the ground rail into two separate halves that aren't actually connected to each other. The ESP32's ground was in one half and the LED circuit's ground was in the other half, so they were never connected despite looking like the same rail. Fixed by bridging both halves with a jumper wire. Worth doing this on any new breadboard build before debugging anything else.
+Spent ages checking polarity, resistor values, GPIO pin mapping, even swapped pins entirely. Eventually traced it to the breadboard itself. The long breadboard I had purchased had a physical gap splitting the ground rail into two separate halves that aren't actually connected to each other. The ESP32's ground was in one half and the LED circuit's ground was in the other half, so they were never connected despite looking like the same rail. Fixed by bridging both halves with a jumper wire.
 
 **BH1750 "device not configured" error, but only sometimes**
 The BH1750 worked fine on a direct 6V supply but kept failing with this error once running off USB. Turned out both sensors had their VCC wired to VIN instead of 3.3V. VIN is unregulated so it just passes through whatever is feeding it, meaning the BH1750 (rated for 2.4 to 3.6V) was actually running at close to 5 or 6V depending on the power source. It happened to behave at 6V but not at 5V from USB, which made it look inconsistent rather than just wrong. Moving both sensors' VCC to the 3.3V pin fixed it completely. This also matters for the battery powered nodes specifically, since a sensor wired to VIN would get less reliable as the battery drains.
 
 **GPIO14 turning on by itself before any code ran**
 Powered on the gateway and noticed one LED was already lit before any sketch had even done anything. Some ESP32 GPIO pins default to a HIGH state for a moment during boot, before `setup()` runs. Fixed by forcing every LED pin LOW right at the very start of the boot sequence function.
-
-**ESP-NOW callback signature error after an IDF update**
-Got a compile error about the send callback signature not matching. Newer versions of the ESP32 Arduino core changed the callback from taking a MAC address to taking a `wifi_tx_info_t` struct instead. Just had to update the callback function signature to match.
 
 **Error LED stuck blinking even while a node was asleep**
 After adding deep sleep, the gateway kept showing a sensor fault for a node that was just sleeping normally. This was because the gateway didn't yet know how to tell apart a sleep announcement from a regular data packet, so the last reading it saw before the node went quiet (which happened to have a sensor fault from sensors not being settled yet) just stayed stuck. Fixed by adding sensor settling delays on the node side, and by having the gateway properly handle `MSG_SLEEP` messages separately from `MSG_DATA`.
@@ -260,8 +255,9 @@ After adding deep sleep, the gateway kept showing a sensor fault for a node that
 
 ## Future Features (Not Built Yet)
 
-- **Remote reset for all nodes:** thought about having the gateway broadcast a reset command over ESP-NOW, but since nodes are asleep most of the time and ESP-NOW only reaches devices that are actually awake, this wouldn't reliably reset a sleeping node. Would need actual hardware (something like a relay or transistor on the gateway pulling each node's EN pin low) to force a reset regardless of sleep state. For now just resetting each node by hand during testing.
+- **Remote reset for all nodes:** thought about having the gateway broadcast a reset command over ESP-NOW, but since nodes are asleep most of the time and ESP-NOW only reaches devices that are actually awake, this wouldn't reliably reset a sleeping node. Still trying to figure out a good solution for this that works with the nodes being in separate rooms.
 - **Rebuilding a day's data from the log file:** a MATLAB script that could take `sensor_log.txt` and reconstruct/replay what happened on any given day, instead of only being able to see things live.
+-  **Small LED screen on the gateway:** an idea to add a small display (like an OLED or LCD) to the gateway that prints the same messages currently going to Serial Monitor. Would mean you could see status/error messages without needing a laptop plugged in and Arduino IDE open, which would be useful once the gateway is meant to just run on its own.
 
 ---
 
