@@ -281,7 +281,7 @@ Room mapping for this test:
 
 No artificial lighting was used in any room during this test.
 
-![Temperature](tests/test1-23.06.2026/temp_graph.png)
+![Temperature](tests/test1-23.06.26/temp_graph.png)
 ![Humidity](tests/test1-23.06.26/humidity_graph.png)
 ![Light Level](tests/test1-23.06.26/light_graph.png)
 
