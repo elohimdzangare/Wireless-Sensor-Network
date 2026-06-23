@@ -1,0 +1,6 @@
+Test 1 Room Labels
+- Room A: Backyard
+- Room B: Basement
+- Room C: Bedroom
+
+*No artificial lighting e.g. lamps, ceiling lights, etc. was used in any of the rooms throughout the test
