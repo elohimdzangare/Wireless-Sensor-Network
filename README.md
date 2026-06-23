@@ -2,6 +2,8 @@
 
 A wireless environmental monitoring system using battery powered ESP32 sensor nodes that measure temperature, humidity and light across three locations. A central gateway collects everything and sends it to MATLAB for live plotting and logging.
 
+<img width="750" height="500" alt="full-sensor-network" src="https://github.com/elohimdzangare/Wireless-Sensor-Network/blob/main/images/Full%20Network.jpg" />
+
 **Status:** Core system is built and working end to end (nodes to gateway to MATLAB). Currently running longer test sessions to collect real data.
 
 ---
@@ -10,7 +12,7 @@ A wireless environmental monitoring system using battery powered ESP32 sensor no
 
 Three sensor nodes (Room A, B, C) each have a DHT22 and a BH1750 sensor and run off 4x AA batteries. Each node wakes up from deep sleep, takes a reading, sends it to the gateway over ESP-NOW, tells the gateway how long it's about to sleep for, then powers down again. The gateway stays on all the time, keeps track of all three nodes, manages 8 status LEDs, and forwards everything to MATLAB over TCP so it can be logged and plotted live.
 
-Rooms are just labelled A, B and C for now instead of actual room names, so the sensors can be moved around without having to change any code. Keep a separate note somewhere of what each letter actually corresponds to.
+Rooms are just labelled A, B and C for now instead of actual room names, so the sensors can be moved around without having to change any code. A separate note of what each letter actually corresponds to is kept somewhere.
 
 ---
 
