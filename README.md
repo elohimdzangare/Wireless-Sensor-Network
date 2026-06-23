@@ -270,6 +270,27 @@ After adding deep sleep, the gateway kept showing a sensor fault for a node that
 
 ---
 
+## Test Results
+
+### Test 1, 23 June 2026 (~7.5 hours)
+
+Room mapping for this test:
+- Room A: Backyard
+- Room B: Basement
+- Room C: Bedroom
+
+No artificial lighting was used in any room during this test.
+
+![Temperature](tests/test1-23.06.2026/temp_graph.png)
+![Humidity](tests/test1-23.06.26/humidity_graph.png)
+![Light Level](tests/test1-23.06.26/light_graph.png)
+
+No timeouts or sensor faults occurred during this run. Full log available [here](sensor_log.txt), room labels [here](tests/test1-23.06.26/room_labels.txt).
+
+The basement (Room B) stayed noticeably more stable in both temperature and humidity than the other two rooms, which makes sense given it's underground and shielded from outdoor temperature swings. The light readings line up well with expected sun position and window placement throughout the afternoon and evening, with the bedroom (Room C) starting brightest from direct sun and dropping off sharply once the sun moved off that window, while the backyard (Room A) decayed more gradually as expected outdoors.
+
+---
+
 ## Build Order (roughly how it actually went)
 
 1. Sensor node firmware: reading sensors, then ESP-NOW transmission
