@@ -29,6 +29,7 @@ Rooms are just labelled A, B and C for now instead of actual room names, so the 
 ```
 /sensor-network
 ├── README.md
+├── sensor_log.txt
 ├── /gateway
 │   └── gateway_matlab.ino       (final gateway sketch)
 ├── /node
@@ -41,6 +42,10 @@ Rooms are just labelled A, B and C for now instead of actual room names, so the 
     ├── gateway_receive_test.ino
     ├── gateway_receive_final.ino
     └── hotspot_connection_test.ino
+└── /images                     (images of the network)
+    ├── Full Network.jpg
+    ├── Gateway.jpg
+    └── Sensor Nodes.jpg
 ```
 
 The `/archive` folder is just earlier versions and one-off test sketches from along the way (testing the sensors before adding ESP-NOW, testing the gateway before connecting it to MATLAB, etc). Not needed to actually run the project, just there to show how it was built up step by step.
