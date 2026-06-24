@@ -16,6 +16,14 @@ Rooms are just labelled A, B and C for now instead of actual room names, so the 
 
 ---
 
+## Possible Applications
+
+- **Greenhouse or shed monitoring**: battery powered nodes with long sleep intervals make sense for outbuildings that don't have easy power access, where you still want to know conditions without running cables.
+- **Home climate monitoring**: tracking temperature, humidity and light across different rooms to spot patterns, like which rooms run cold in winter or get too much direct sun, without needing a smart home hub.
+- **Damp/mould risk detection**: persistently high humidity in an enclosed space like a basement is an early warning sign for mould risk, this system could flag rooms worth checking on.
+
+---
+
 ## Repo Structure
 
 ```
