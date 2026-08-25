@@ -4,7 +4,7 @@ A wireless environmental monitoring system using battery powered ESP32 sensor no
 
 <img width="750" height="500" alt="full-sensor-network" src="https://github.com/elohimdzangare/Wireless-Sensor-Network/blob/main/images/Full%20Network.jpg" />
 
-**Status:** Core system is built and working end to end (nodes to gateway to MATLAB). Currently running longer test sessions to collect real data.
+**Status:** Core system is built and working end to end (nodes to gateway to MATLAB). All three nodes and the gateway have since been redesigned as custom PCBs. Not currently running further test sessions, though one more test run may happen in the future.
 
 ---
 
@@ -44,8 +44,15 @@ Rooms are just labelled A, B and C for now instead of actual room names, so the 
     └── hotspot_connection_test.ino
 └── /images                     (images of the network)
     ├── Full Network.jpg
-    ├── Gateway.jpg
-    └── Sensor Nodes.jpg
+    ├── Gateway 3D Render.png
+    ├── Gateway PCB Layout.png
+    ├── Gateway.jpg 
+    ├── Node 3D Render.png
+    ├── Node PCB Layout.png 
+    ├── Sensor Nodes.jpg
+    ├── gateway_schematic.png
+    ├── node_schematic.png
+    └── updated node schematic.png
 ```
 
 The `/archive` folder is just earlier versions and one-off test sketches from along the way (testing the sensors before adding ESP-NOW, testing the gateway before connecting it to MATLAB, etc). Not needed to actually run the project, just there to show how it was built up step by step.
@@ -301,6 +308,56 @@ No artificial lighting was used in any room during this test.
 No timeouts or sensor faults occurred during this run. Full log available [here](sensor_log.txt), room labels [here](tests/test1-23.06.26/room_labels.txt).
 
 The basement (Room B) stayed noticeably more stable in both temperature and humidity than the other two rooms, which makes sense given it's underground and shielded from outdoor temperature swings. The light readings line up well with expected sun position and window placement throughout the afternoon and evening, with the bedroom (Room C) starting brightest from direct sun and dropping off sharply once the sun moved off that window, while the backyard (Room A) decayed more gradually as expected outdoors.
+
+---
+
+## PCB Version
+
+Both the sensor nodes and the gateway have since been redesigned as custom PCBs in KiCad.
+
+**Node:** Same circuit as the breadboard version (ESP32 DevKitC, DHT22, BH1750), with the addition of a 2-pin battery connector (J1) wired directly to the ESP32's 5V and GND pins, so each node can be powered by a battery through the PCB itself.
+
+**Gateway:** No schematic changes, only a new PCB layout. The gateway continues to run off the ESP32's USB-C power, same as the breadboard version.
+
+<p align="center">
+  <img width="600" alt="Updated Node Schematic" src="images/updated%20node%20schematic.png" />
+  <br/>
+  <em>Figure 1: Updated Node Schematic</em>
+</p>
+
+<br/>
+
+<p align="center">
+  <img width="600" alt="Node PCB Layout" src="images/Node%20PCB%20Layout.png" />
+  <br/>
+  <em>Figure 2: Node PCB Layout</em>
+</p>
+
+<br/>
+
+<p align="center">
+  <img width="600" alt="Node 3D Render" src="images/Node%203D%20Render.png" />
+  <br/>
+  <em>Figure 3: Node PCB 3D Render</em>
+</p>
+
+<br/>
+
+<p align="center">
+  <img width="600" alt="Gateway PCB Layout" src="images/Gateway%20PCB%20Layout.png" />
+  <br/>
+  <em>Figure 4: Gateway PCB Layout</em>
+</p>
+
+<br/>
+
+<p align="center">
+  <img width="600" alt="Gateway 3D Render" src="images/Gateway%203D%20Render.png" />
+  <br/>
+  <em>Figure 5: Gateway PCB 3D Render</em>
+</p>
+
+KiCad project files: [WSN KiCad Files](WSN%20KiCad%20Files)
 
 ---
 
